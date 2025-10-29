@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "@/components/organisms/Layout";
-
+import LayoutWrapper from "@/components/organisms/LayoutWrapper";
 // Lazy load all page components
 const Home = lazy(() => import("@/components/pages/Home"));
 const ProductDetailPage = lazy(() => import("@/components/pages/ProductDetailPage"));
@@ -95,7 +94,7 @@ const mainRoutes = [
 const routes = [
   {
     path: "/",
-    element: <Layout />,
+    element: <LayoutWrapper />,
     children: mainRoutes,
   },
 ];

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "@/router";
 import { ToastContainer } from "react-toastify";
 import { AnimatePresence } from "framer-motion";
-import Checkout from "@/components/pages/Checkout";
-import ProductDetailPage from "@/components/pages/ProductDetailPage";
-import Cart from "@/components/pages/Cart";
 import CartSidebar from "@/components/organisms/CartSidebar";
-import Header from "@/components/organisms/Header";
 
+// Create context for cart state to be accessible throughout the app
+export const CartContext = createContext(null);
 function App() {
   const [cartItems, setCartItems] = useState([]);
   const [showCartSidebar, setShowCartSidebar] = useState(false);
@@ -56,14 +54,21 @@ function App() {
     setCartItems([]);
 };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header
-        cartItemCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
-        onMenuClick={() => setShowCartSidebar(true)}
-      />
-
-      <RouterProvider router={router} />
+return (
+    <CartContext.Provider
+      value={{
+        cartItems,
+        setCartItems,
+        handleAddToCart,
+        handleUpdateQuantity,
+        handleRemoveItem,
+        handleClearCart,
+        showCartSidebar,
+        setShowCartSidebar,
+      }}
+    >
+      <div className="min-h-screen bg-gray-50">
+        <RouterProvider router={router} />
         <AnimatePresence>
           {showCartSidebar && (
             <>
@@ -79,7 +84,7 @@ function App() {
               />
             </>
           )}
-        </AnimatePresence>
+</AnimatePresence>
 
         <ToastContainer
           position="top-right"
@@ -90,9 +95,10 @@ function App() {
           rtl={false}
           pauseOnFocusLoss
           draggable
-pauseOnHover
+          pauseOnHover
         />
-    </div>
+      </div>
+    </CartContext.Provider>
   );
 }
 
