@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "@/router";
 import { ToastContainer } from "react-toastify";
 import { AnimatePresence } from "framer-motion";
-import Header from "@/components/organisms/Header";
-import CartSidebar from "@/components/organisms/CartSidebar";
-import Home from "@/components/pages/Home";
+import Checkout from "@/components/pages/Checkout";
 import ProductDetailPage from "@/components/pages/ProductDetailPage";
 import Cart from "@/components/pages/Cart";
-import Checkout from "@/components/pages/Checkout";
-import OrderConfirmation from "@/components/pages/OrderConfirmation";
+import CartSidebar from "@/components/organisms/CartSidebar";
+import Header from "@/components/organisms/Header";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -55,41 +54,16 @@ function App() {
 
   const handleClearCart = () => {
     setCartItems([]);
-  };
+};
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
-        <Header
-          cartItemCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
-          onMenuClick={() => setShowCartSidebar(true)}
-        />
+    <div className="min-h-screen bg-gray-50">
+      <Header
+        cartItemCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
+        onMenuClick={() => setShowCartSidebar(true)}
+      />
 
-        <Routes>
-          <Route path="/" element={<Home onAddToCart={handleAddToCart} />} />
-          <Route
-            path="/product/:id"
-            element={<ProductDetailPage onAddToCart={handleAddToCart} />}
-          />
-          <Route
-            path="/cart"
-            element={
-              <Cart
-                cartItems={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
-              />
-            }
-          />
-          <Route
-            path="/checkout"
-            element={
-              <Checkout cartItems={cartItems} onClearCart={handleClearCart} />
-            }
-          />
-          <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        </Routes>
-
+      <RouterProvider router={router} />
         <AnimatePresence>
           {showCartSidebar && (
             <>
@@ -116,10 +90,9 @@ function App() {
           rtl={false}
           pauseOnFocusLoss
           draggable
-          pauseOnHover
+pauseOnHover
         />
-      </div>
-    </BrowserRouter>
+    </div>
   );
 }
 
