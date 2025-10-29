@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import productService from "@/services/api/productService";
 import ProductCard from "@/components/organisms/ProductCard";
@@ -9,8 +9,10 @@ import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
+import { CartContext } from "@/App";
 
-const Home = ({ onAddToCart }) => {
+const Home = () => {
+  const { handleAddToCart } = useContext(CartContext);
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -74,8 +76,8 @@ const Home = ({ onAddToCart }) => {
     }
   };
 
-  const handleAddToCart = (product) => {
-    onAddToCart(product);
+const handleAddToCartClick = (product) => {
+    handleAddToCart(product);
     toast.success(`${product.title} added to cart!`);
   };
 
@@ -174,11 +176,11 @@ const Home = ({ onAddToCart }) => {
               layout
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
-              {filteredProducts.map((product) => (
+{filteredProducts.map((product) => (
                 <ProductCard
                   key={product.Id}
                   product={product}
-                  onAddToCart={handleAddToCart}
+                  onAddToCart={handleAddToCartClick}
                 />
               ))}
             </motion.div>
